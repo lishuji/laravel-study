@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use  HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'avatar',
         'email',
         'password',
     ];
@@ -43,36 +43,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $table = 'users';
-
-//    protected $primaryKey = 'id';
-
-//    public $incrementing = false;
-
-//    protected $keyType = 'string';
-
-//    public $timestamps = false;
-
-//    protected $dateFormat = 'U';
-
-//    const CREATED_AT = 'creation_date';
-
-//    const UPDATED_AT = 'last_update';
-
     protected $connection = 'mysql';
 
     protected $attributes = [
         'password' => '1234567'
     ];
 
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
     /**
      * 全局作用域
      */
     protected static function booted()
     {
-        static::addGlobalScope('age', function (Builder $builder) {
-            $builder->where('age', '>', 200);
-        });
+//        static::addGlobalScope('age', function (Builder $builder) {
+//            $builder->where('age', '>', 200);
+//        });
     }
 
     /**
