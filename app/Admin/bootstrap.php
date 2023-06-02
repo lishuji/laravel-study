@@ -6,6 +6,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid\Filter;
 use Dcat\Admin\Layout\Navbar;
 use Dcat\Admin\Show;
+use Dcat\Admin\Form\Field;
 
 /**
  * Dcat-admin - admin builder based on Laravel.
@@ -32,22 +33,4 @@ Dcat\Admin\Color::extend('orange', [
     'link' => '#fbbd08',
 ]);
 
-//Dcat\Admin\Form::extend('php', PHPEditor::class);
-Dcat\Admin\Grid\Column::extend('php', \App\Models\User::class);
-//Dcat\Admin\Grid\Filter::extend('php', PHPEditor::class);
-
-Admin::asset()->alias('@my-name1', 'assets/admin1');
-Admin::asset()->alias('@my-name2', 'assets/admin2');
-
-
-//Admin::navbar(function (Navbar $navbar) {
-//
-////    $navbar->left('html...');
-//
-////    $navbar->right('html...');
-//
-//});
-
-Grid::resolving(function (Grid $grid) {
-    $grid->tableCollapse(false);
-});
+Form\Field\Map::requireAssets();

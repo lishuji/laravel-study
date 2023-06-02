@@ -2,7 +2,7 @@
 return [
     'labels' => [
         'Good' => '商品列表',
-        'good' => '商品列表',
+        'goods' => '商品列表',
     ],
     'fields' => [
         'category_id' => '商品分类',

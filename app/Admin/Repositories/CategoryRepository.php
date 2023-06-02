@@ -5,7 +5,7 @@ namespace App\Admin\Repositories;
 use App\Models\Category as CategoryModel;
 use Dcat\Admin\Repositories\EloquentRepository;
 
-class Category extends EloquentRepository
+class CategoryRepository extends EloquentRepository
 {
     /**
      * Model.
@@ -13,6 +13,8 @@ class Category extends EloquentRepository
      * @var string
      */
     protected $eloquentClass = CategoryModel::class;
+
+
 
     public function getGridColumns()
     {

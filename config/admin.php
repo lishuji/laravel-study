@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => '我的商城',
+    'name' => 'Dcat Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="/vendor/dcat-admin/images/logo.png" width="35"> &nbsp;码师傅的商城',
+    'logo' => '<img src="/vendor/dcat-admin/images/logo.png" width="35"> &nbsp;Dcat Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
      | Set a default avatar for newly created users.
      |
      */
-    'default_avatar' => '/vendor/dcat-admin/images/avatar.jpeg',
+    'default_avatar' => '@admin/images/default-avatar.jpg',
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => '我的商城',
+    'title' => 'Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -262,13 +262,12 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'public',
+        'disk' => 'admin',
 
-        // Image and file upload path under the disk above.
         'directory' => [
             'image' => 'images',
             'file' => 'files',
-        ],
+        ]
 
     ],
 
@@ -319,13 +318,12 @@ return [
     | This value is the layout of admin pages.
     */
     'layout' => [
-        // default, blue, blue-light, green, orange
-        'color' => 'orange',
+        // default, blue, blue-light, green
+        'color' => 'default',
 
         // sidebar-separate
-        'body_class' => ['dark-mode'],
+        'body_class' => [],
 
-        // 横向菜单
         'horizontal_menu' => false,
 
         'sidebar_collapsed' => false,
@@ -365,5 +363,10 @@ return [
         // When you use command `php artisan admin:ext-make` to generate extensions,
         // the extension files will be generated in this directory.
         'dir' => base_path('dcat-admin-extensions'),
+
     ],
+
+    'map_provider' => 'tencent',
+
+
 ];

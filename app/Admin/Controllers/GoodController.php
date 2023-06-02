@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Good;
+use App\Models\Category;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -28,10 +29,10 @@ class GoodController extends AdminController
             $grid->column('stock');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-        
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-        
+
             });
         });
     }
@@ -68,14 +69,15 @@ class GoodController extends AdminController
     {
         return Form::make(new Good(), function (Form $form) {
             $form->display('id');
-            $form->text('category_id');
+//            $form->select('category_id')->options(Category::class, 'id', 'name')->ajax('/admin/api/categories');
+            $form->select('category_id')->options(Category::query()->pluck('name', 'id'));
             $form->text('code');
-            $form->text('name');
+            $form->text('name')->required();
             $form->text('description');
             $form->text('image');
-            $form->text('price');
+            $form->text('price')->required();
             $form->text('stock');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });
