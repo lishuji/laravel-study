@@ -1,7 +1,9 @@
 FROM php:8.1-fpm
 
 ARG user
+ARG group
 ARG uid
+ARG gid
 
 # 安装基础拓展
 RUN apt-get update && apt-get install -y \
@@ -30,8 +32,9 @@ Run docker-php-ext-install  \
 # 安装 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 添加用户
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
+# 添加用户组
+RUN groupadd -g ${gid} ${group} && useradd -u ${uid} -G ${group} -s /bin/sh -D ${user} \
+
 
 Run mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
