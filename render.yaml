@@ -2,11 +2,6 @@ version: "3.0"
 services:
     app:
         build:
-            args:
-                - user=appuser
-                - group=appuser
-                - uid=1000
-                - gid=1000
             context: ./
             dockerfile: Dockerfile
         env_file:
@@ -48,14 +43,14 @@ services:
             - "8080:80"
         volumes:
             - ./:/var/www
-            - ./.docker/nginx:/etc/nginx/conf.d
+            - ./conf/nginx:/etc/nginx/conf.d
         networks:
             - app-network
         depends_on:
             - app
         links:
             - app
-        command: nginx -g "daemon off;"
+#        command: nginx -g "daemon off;"
 
     redis:
         image: redis
