@@ -3,6 +3,7 @@ FROM php:8.1-fpm
 ARG user
 ARG uid
 
+# 安装基础拓展
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,24 +15,28 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip
 
+# 清理缓存
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-Run docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+# 安装PHP核心拓展
+Run docker-php-ext-install  \
+    pdo_mysql  \
+    mbstring  \
+    exif  \
+    pcntl  \
+    bcmath  \
+    gd
 
+# 安装 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# 添加用户
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 
 Run mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-
-#RUN php asrtisan config:cache && \
-#    php artisan route:cache && \
-#    php artisan view:cache && \
-#    chmod -R 777 /var/www/storage && \
-#    chown -R $user:$user /var/www
-
+# 设置工作目录
 WORKDIR /var/www
 
 USER $user

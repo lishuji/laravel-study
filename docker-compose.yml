@@ -9,36 +9,31 @@ services:
             dockerfile: Dockerfile
         container_name: app
         restart: unless-stopped
-        ports:
-            - "9000:9000"
-        env_file:
-            -   .env
         working_dir: /var/www
         volumes:
             - ./:/var/www
+        ports:
+            - "9000:9000"
         networks:
             - app-network
         depends_on:
             - mysql
             - redis
-        command: >-
-            sh -c " rm -rf vendor ;\
-            composer install --ignore-platform-reqs ;\
-            php artisan key:generate ;\
-            php artisan migrate ";
+#        command: >-
+#            sh -c "composer install --ignore-platform-reqs && php artisan migrate";
     mysql:
-     image: mysql:8.0
-     container_name: mysql
-     restart: unless-stopped
-     ports:
-         - "3306:3306"
-     environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: laravel_study
-        MYSQL_USER: test
-        MYSQL_PASSWORD: test
-     networks:
-        - app-network
+        image: mysql:8.0
+        container_name: mysql
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel_study
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+        networks:
+            - app-network
 
     nginx:
         image: nginx:1.21
@@ -52,13 +47,18 @@ services:
             - ./.docker/nginx:/etc/nginx/conf.d
         networks:
             - app-network
+        depends_on:
+            - app
+        links:
+            - app
+        command: nginx -g "daemon off;"
 
     redis:
         image: redis
         container_name: redis
         restart: always
         ports:
-            - "6380:6380"
+            - "6379:6379"
         environment:
             - TZ=Asia/Shanghai
         networks:
