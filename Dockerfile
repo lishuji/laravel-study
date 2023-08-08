@@ -33,11 +33,9 @@ Run docker-php-ext-install  \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # 添加用户组
-RUN groupadd -g ${gid} ${group} && useradd -u ${uid} -G ${group} -s /bin/sh -D ${user} \
+# RUN groupadd -g ${gid} ${group} && useradd -u ${uid} -G ${group} -s /bin/sh -D ${user} \
 
-
-Run mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+#Run mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 
 # 设置工作目录
 WORKDIR /var/www
