@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cvs-config
+data:
+  .env: |
+    APP_NAME=Laravel-study
+    APP_ENV=dev

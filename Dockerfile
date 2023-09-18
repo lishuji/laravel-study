@@ -30,4 +30,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # 设置工作目录
 WORKDIR /var/www
 
-USER $user
+COPY start.sh /usr/local/bin/entrypoint
+RUN chmod +x /usr/local/bin/entrypoint
+
+ENTRYPOINT ["bash", ".start.sh"]

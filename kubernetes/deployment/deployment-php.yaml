@@ -1,0 +1,84 @@
+apiVersion: apps/va
+kind: deployment
+metadata:
+  name: php
+  labels:
+    tier: backend
+spec:
+  replicas: 1
+  minReadySeconds: 3 # Pod就绪/可用后的时间
+  revisionHistoryLimit: 6 # 保留的旧副本数量，方便回滚到上一个版本：kubectl rollout undo deployment.v1.apps/DEPLOY_NAME
+  strategy: # 滚动更新策略，Recreate：先杀Pods，再创建；RollingUpdate：滚动更新
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # 最大峰值，可是绝对值或百分比(默认25%)，用来指定可以创建的超出期望 Pod 个数的 Pod 数量。比如30%表示新旧pod数量不超过130%
+      maxUnavailable: 50% # 更新中不可用Pod的个数上限，可是绝对值或百分比(默认25%)
+  selector:
+    matchLabels:
+      app: php #与下面template中对应
+      tier: backend
+    template:
+      metadata:
+        name: php
+        labels:
+          app: php
+          tier: backend
+      spec:
+        initContainers: # 初始化容器，用于初始化Pod的环境，比如下载文件、初始化数据库等
+          - name: artisan
+            image: ccr.ccs.tencentyun.com/kanzi/laravel
+            imagePullPolicy: Always
+            envFrom:
+                - configMapRef:
+                    name: cvs-config
+            args:
+                - /bin/bash
+                - -c
+                - (php artisan migrate || true) && (php artisan config:cache || true) && (php
+                  artisan route:cache || true) && (cp -rp /var/www /codebase)
+            volumeMounts: #init容器先把代码拷贝到共享volume中
+                - mountPath: /codebase
+                  name: codebase
+        containers:
+          - name: php
+            image: ccr.ccs.tencentyun.com/kanzi/laravel
+            imagePullPolicy: Always
+            ports: #暴露的端口
+              - containerPort: 9000
+                protocol: TCP
+            livenessProbe: #存活探测器
+              failureThreshold: 3
+              initialDelaySeconds: 15 #第一次探测前延迟的秒数
+              periodSeconds: 10 #每次探测间隔秒数
+              successThreshold: 1
+              tcpSocket: #表示用tcp套接字来检测存活状态
+                port: 9000
+              timeoutSeconds: 1
+            readinessProbe: #就绪探测器
+              failureThreshold: 3
+              initialDelaySeconds: 15
+              periodSeconds: 5
+              successThreshold: 1
+              tcpSocket:
+                port: 9000
+              timeoutSeconds: 1
+            resources: #资源限制
+              limits:
+                cpu: 200m
+                memory: 400M
+              requests:
+                cpu: 100m
+                memory: 200M
+            volumeMounts:
+              - mountPath: /var/www/
+                name: codebase
+            lifecycle:
+              postStart:
+                exec:
+                  command: [ "/bin/sh", "-c", "chmod 777 -R storage && chmod 777 -R bootstrap/cache" ]
+
+        volumes: #共享代码volume（app和initContainer）
+          - name: codebase
+            emptyDir: { }
+        imagePullSecrets:
+          - name: regsecret #拉取镜像的secret
