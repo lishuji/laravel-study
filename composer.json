@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.1",
         "ext-pdo": "*",
-        "beyondcode/laravel-websockets": "^1.14",
         "dcat/laravel-admin": "2.2.2-beta",
         "guzzlehttp/guzzle": "^7.0.1",
         "kanelli/graph-validate-code": "dev-master",
@@ -15,7 +14,8 @@
         "maatwebsite/excel": "^3.1",
         "nunomaduro/collision": "^6.1",
         "predis/predis": "^2.1",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^1.0",
+        "workerman/gateway-worker": "^3.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.4",
