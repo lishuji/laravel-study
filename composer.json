@@ -15,6 +15,7 @@
         "nunomaduro/collision": "^6.1",
         "predis/predis": "^2.1",
         "spatie/laravel-ignition": "^1.0",
+        "w7corp/easywechat": "^5.34",
         "workerman/gateway-worker": "^3.1"
     },
     "require-dev": {
@@ -41,7 +42,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": false
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
