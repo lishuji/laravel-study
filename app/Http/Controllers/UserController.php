@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Kanelli\GraphValidateCode\Facades\GraphValidateCodeFacade;
 use Kanelli\GraphValidateCode\GraphValidateCode;
+use Maatwebsite\Excel\Facades\Excel;
 use function PHPUnit\Framework\exactly;
 
 
@@ -55,6 +56,11 @@ class UserController extends Controller
     public function destory(Request $request)
     {
         return User::destroy($request->id);
+    }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 
 
