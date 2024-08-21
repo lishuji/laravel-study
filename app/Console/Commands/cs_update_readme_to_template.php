@@ -86,7 +86,7 @@ class cs_update_readme_to_template extends Command
     {
         $cosClient = new Client(
             array(
-                'region' => $this::region,
+                'region' => self::region,
                 'schema' => 'https',
                 'credentials' => array(
                     'secretId' => self::secretId,
@@ -99,7 +99,7 @@ class cs_update_readme_to_template extends Command
 
         try {
             $result = $cosClient->putObject(array(
-                'Bucket' => $this::bucket,
+                'Bucket' => self::bucket,
                 'Key' => $key,
                 'Body' => fopen($file, 'rb')
             ))->toArray();
